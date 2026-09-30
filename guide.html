@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>場地預約｜操作說明</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F6F3;--panel:#FFFFFF;--ink:#2B2B28;--muted:#6F6D66;--line:#E3E1DA;--sel:#378ADD;--red:#DC2626;
+  --ok-bg:#EEEDFE;--ok-tx:#3C3489;--wait-bg:#FAEEDA;--wait-tx:#633806;--tip-bg:#E1F5EE;--tip-tx:#085041}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.85;font-size:16px}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:22px 16px}
+header .in{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{font-size:22px;font-weight:700;margin-right:auto}
+header h1 small{display:block;font-size:13px;font-weight:400;color:var(--muted)}
+.go{display:inline-block;padding:9px 18px;border-radius:9px;background:var(--sel);color:#fff;text-decoration:none;font-weight:500;font-size:15px}
+.layout{max-width:980px;margin:0 auto;padding:24px 16px 80px}
+nav.toc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 22px;margin-bottom:28px}
+nav.toc b{display:block;margin-bottom:6px}
+nav.toc ol{columns:2;column-gap:32px;padding-left:22px;font-size:15px}
+nav.toc a{color:var(--ink);text-decoration:none}
+nav.toc a:hover{color:var(--sel);text-decoration:underline}
+.intro{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 22px;margin-bottom:22px;font-size:15.5px}
+section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:22px;scroll-margin-top:12px}
+h2{font-size:20px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+h2 .no{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:var(--ink);color:#fff;font-size:15px;flex-shrink:0}
+h3{font-size:16.5px;font-weight:700;margin:18px 0 6px}
+p{margin-bottom:8px}
+figure{margin:14px 0 16px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg)}
+figure a{display:block;cursor:zoom-in}
+figure img{display:block;width:100%;height:auto}
+figure.narrow{max-width:480px}
+figure.phone{max-width:300px}
+figcaption{font-size:13px;color:var(--muted);padding:6px 12px;border-top:1px solid var(--line);background:var(--panel)}
+ul.marks,ol.steps{list-style:none;padding-left:0;margin:8px 0}
+ul.marks li,ol.steps li{position:relative;padding-left:36px;margin-bottom:8px}
+.n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-size:13px;font-weight:700;position:absolute;left:0;top:3px}
+.n.inline{position:static;vertical-align:-5px;margin:0 2px}
+ol.steps{counter-reset:s}
+ol.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:3px;width:24px;height:24px;border-radius:50%;background:var(--sel);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.tip,.warn{border-radius:10px;padding:10px 14px;margin:12px 0;font-size:15px}
+.tip{background:var(--tip-bg);color:var(--tip-tx)}
+.warn{background:var(--wait-bg);color:var(--wait-tx)}
+.btn{display:inline-block;padding:0 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);font-size:14px;line-height:1.7;white-space:nowrap}
+.btn.blue{background:var(--sel);color:#fff;border-color:var(--sel)}
+.btn.green{background:#2E7D4F;color:#fff;border-color:#2E7D4F}
+.btn.red{background:#C0392B;color:#fff;border-color:#C0392B}
+.st{display:inline-block;padding:0 8px;border-radius:6px;font-size:14px;font-weight:700}
+.st.ok{background:var(--ok-bg);color:var(--ok-tx)}
+.st.wait{background:var(--wait-bg);color:var(--wait-tx);border:1px dashed #EF9F27}
+table{border-collapse:collapse;width:100%;font-size:14.5px;margin:10px 0}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:10px;background:var(--panel)}
+details summary{cursor:pointer;font-weight:700}
+details[open] summary{margin-bottom:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.top{position:fixed;right:16px;bottom:16px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:20px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+@media (max-width:720px){nav.toc ol{columns:1} section{padding:18px 16px} .two{grid-template-columns:1fr}}
+@media print{header .go,.top,nav.toc{display:none} section{break-inside:avoid-page;border:none;padding:0 0 12px} body{background:#fff}}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <h1>🏫 力行國小場地預約　操作說明<small>取代校務行政系統的「申請場地借用」</small></h1>
+  <a class="go" href="./" target="_blank" rel="noopener">開啟場地預約 →</a>
+</div></header>
+
+<div class="layout">
+  <div class="intro">
+    <b>三句話說完：</b>用學校帳號登入 → 在表格上<b>點空格</b> → 填活動名稱按「確認借用」。<br>
+    一張表同時看到<b>所有場地、每一節</b>的使用狀況；申請人自動帶入，不用再打名字；固定課程勾「每週重複」一次借到學期末。
+  </div>
+
+  <nav class="toc">
+    <b>目錄</b>
+    <ol>
+      <li><a href="#login">登入</a></li>
+      <li><a href="#day">看哪裡有空（每日總覽）</a></li>
+      <li><a href="#book">借用場地</a></li>
+      <li><a href="#multi">一次借好幾格</a></li>
+      <li><a href="#weekly">固定課程：每週重複</a></li>
+      <li><a href="#detail">查看別人的預約</a></li>
+      <li><a href="#mine">我的預約、取消、退回通知</a></li>
+      <li><a href="#approve">審核人：核准或退回</a></li>
+      <li><a href="#admin">管理者：場地管理</a></li>
+      <li><a href="#phone">用手機借</a></li>
+      <li><a href="#faq">常見問題</a></li>
+    </ol>
+  </nav>
+
+  <section id="login">
+    <h2><span class="no">1</span>登入</h2>
+    <div class="two">
+      <figure class="narrow"><a href="guide/01-login.png" target="_blank"><img src="guide/01-login.png" alt="登入畫面" loading="lazy"></a><figcaption>登入畫面</figcaption></figure>
+      <div>
+        <ul class="marks"><li><span class="n">1</span>按 <span class="btn blue">使用 Google 帳號登入</span>，選你的學校帳號（<b>@lsps.tp.edu.tw</b>）。</li></ul>
+        <p>和「頒獎典禮座位預約」是同一套帳號，登入過一次之後會記住。</p>
+        <div class="warn">⚠ 從 LINE、Facebook 點連結會登入失敗，請改用 Chrome、Edge 或 Safari 開啟。</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="day">
+    <h2><span class="no">2</span>看哪裡有空（每日總覽）</h2>
+    <p>登入後看到的就是這張表：<b>每一列是一個場地、每一欄是一節</b>，一眼就知道今天哪裡有空。</p>
+    <figure><a href="guide/02-day.png" target="_blank"><img src="guide/02-day.png" alt="每日總覽" loading="lazy"></a><figcaption>每日總覽（點圖放大）</figcaption></figure>
+    <ul class="marks">
+      <li><span class="n">1</span><b>換日期</b>：◀ ▶ 前後一天，或點下面的「週一～週五」、直接挑日期。</li>
+      <li><span class="n">2</span><b>顏色</b>：白色＝空檔、<span class="st ok">紫色</span>＝已借用、<span class="st wait">黃色斜紋</span>＝等待審核、藍框＝你自己借的；灰色斜紋＝已經過去的時段。</li>
+      <li><span class="n">3</span>場地名稱旁有 <span class="st wait">需審核</span> 的，借了之後要等承辦人核准才生效。</li>
+      <li><span class="n">4</span>藍底的欄位是<b>現在這一節</b>。</li>
+      <li><span class="n">5</span>已借用的格子會寫活動名稱和申請人，點一下看詳細資料。</li>
+    </ul>
+  </section>
+
+  <section id="book">
+    <h2><span class="no">3</span>借用場地</h2>
+    <div class="two">
+      <figure><a href="guide/03-book.png" target="_blank"><img src="guide/03-book.png" alt="借用對話框" loading="lazy"></a><figcaption>點空格後跳出的借用視窗</figcaption></figure>
+      <div>
+        <ol class="steps">
+          <li>在總覽表上<b>點一個空格</b>（滑鼠移過去會出現「＋ 借用」）。</li>
+          <li>確認 <span class="n inline">1</span> 場地、日期、節次。想多借幾節，直接在 <span class="n inline">2</span> 點其他節次（灰色的是已被借走或已過去）。</li>
+          <li>填 <span class="n inline">3</span> <b>活動名稱</b>（必填）。申請單位第一次填好後會自動記住。</li>
+          <li><span class="n inline">4</span> 選「只借這次」或「每週重複」。</li>
+          <li>按 <span class="n inline">5</span> <span class="btn blue">確認借用</span> 就完成了。</li>
+        </ol>
+        <div class="tip">💡 <b>申請人不用填</b>，系統會用你登入的帳號。晚上或放學後的活動可以在「實際使用時間」寫 18:30-20:30。</div>
+      </div>
+    </div>
+    <p>免審核的場地（例如視聽教室、209 電腦教室）按下去<b>立刻借到</b>；需審核的場地會顯示 <span class="st wait">待審核</span>，承辦人核准後變成 <span class="st ok">已借用</span>。</p>
+  </section>
+
+  <section id="multi">
+    <h2><span class="no">4</span>一次借好幾格</h2>
+    <p>用滑鼠<b>按住一個空格、拖到另一格再放開</b>，框到的空格會一起選起來（可以跨節次、也可以跨場地），放開就跳出借用視窗。</p>
+    <figure><a href="guide/04-drag.png" target="_blank"><img src="guide/04-drag.png" alt="拖曳選取" loading="lazy"></a><figcaption><span class="n inline">1</span> 拖曳框到的空格會變藍</figcaption></figure>
+    <p>手機沒辦法拖曳：點一格後，在借用視窗裡的「節次」點選其他節就能加借。</p>
+  </section>
+
+  <section id="weekly">
+    <h2><span class="no">5</span>固定課程：每週重複</h2>
+    <p>社團、資訊課這類每週固定的課，不用每週借一次。切到上方的 <b>「場地週表」</b>，看一個場地一整週的狀況：</p>
+    <figure><a href="guide/05-week.png" target="_blank"><img src="guide/05-week.png" alt="場地週表" loading="lazy"></a><figcaption><span class="n inline">1</span> 選場地　<span class="n inline">2</span> 這個場地的借用注意事項　<span class="n inline">3</span> 點要借的那一格</figcaption></figure>
+    <div class="two">
+      <figure><a href="guide/06-weekly.png" target="_blank"><img src="guide/06-weekly.png" alt="每週重複" loading="lazy"></a><figcaption>勾選每週重複</figcaption></figure>
+      <div>
+        <ul class="marks">
+          <li><span class="n">1</span>選 <b>每週重複，直到</b>，日期預設是學期結束日，可以自己改。</li>
+          <li><span class="n">2</span>系統算好總共會借幾格。</li>
+          <li><span class="n">3</span>中間如果有幾週<b>已經被別人借走</b>，會列出來並自動跳過，其他週照樣借到。</li>
+        </ul>
+        <div class="tip">💡 一週有好幾堂課：在週表上把這週要用的格子都選起來（拖曳或在視窗裡點節次），再勾每週重複，一次全部搞定。</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="detail">
+    <h2><span class="no">6</span>查看別人的預約</h2>
+    <div class="two">
+      <figure class="narrow"><a href="guide/07-detail.png" target="_blank"><img src="guide/07-detail.png" alt="預約詳細資料" loading="lazy"></a><figcaption>點已借用的格子</figcaption></figure>
+      <div>
+        <p>點任何已借用的格子，<span class="n inline">1</span> 會顯示活動、時間、申請人和 email。需要協調場地時，可以直接寫信給對方。</p>
+        <p>別人的預約只能看、不能改。如果是你借的，這裡會有「取消」按鈕。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="mine">
+    <h2><span class="no">7</span>我的預約、取消、退回通知</h2>
+    <figure><a href="guide/08-mine.png" target="_blank"><img src="guide/08-mine.png" alt="我的預約" loading="lazy"></a><figcaption>我的預約</figcaption></figure>
+    <ul class="marks">
+      <li><span class="n">1</span>上方「我的預約」出現紅色數字，表示有新通知。</li>
+      <li><span class="n">2</span>申請<b>被退回</b>或被承辦人取消時，這裡會寫原因。看完按 × 關掉。</li>
+      <li><span class="n">3</span>每筆預約的狀態：<span class="st ok">已借用</span> 或 <span class="st wait">待審核</span>。每週重複的會合成一筆，寫「每週二 第1節 共 15 格」。</li>
+      <li><span class="n">4</span>不用了就按 <span class="btn">取消</span>，把場地讓給別人。每週重複的可以「全部取消」，或展開「看每一格」只取消某一週。</li>
+    </ul>
+  </section>
+
+  <section id="approve">
+    <h2><span class="no">8</span>審核人：核准或退回</h2>
+    <p>如果你是某些場地的審核人，上方會多一個 <b>「待審核」</b>，紅色數字是還沒處理的件數。</p>
+    <figure><a href="guide/09-approve.png" target="_blank"><img src="guide/09-approve.png" alt="待審核" loading="lazy"></a><figcaption>待審核清單</figcaption></figure>
+    <ul class="marks">
+      <li><span class="n">1</span>「待審核」後的數字＝等你處理的格數。</li>
+      <li><span class="n">2</span><span class="btn green">核准</span>：每週重複的申請會<b>整批一起核准</b>。</li>
+      <li><span class="n">3</span><span class="btn red">退回</span>：填寫原因，系統會通知申請人，場地也會空出來給別人借。</li>
+    </ul>
+    <div class="tip">💡 也可以在總覽表上點黃色的格子，只核准其中某一格。</div>
+  </section>
+
+  <section id="admin">
+    <h2><span class="no">9</span>管理者：場地管理</h2>
+    <figure><a href="guide/10-admin.png" target="_blank"><img src="guide/10-admin.png" alt="場地管理" loading="lazy"></a><figcaption>場地管理（只有管理者看得到）</figcaption></figure>
+    <ul class="marks">
+      <li><span class="n">1</span><b>學期結束日</b>：「每週重複」預設借到這一天，每學期開學前記得改。</li>
+      <li><span class="n">2</span>勾 <b>需審核</b>，這個場地的申請就要等人核准。</li>
+      <li><span class="n">3</span><b>審核人</b>：填學校 email，多位用逗號分開。需審核但沒填審核人的場地，會由管理者審核。</li>
+      <li><span class="n">4</span>每一列改完要按該列的 <span class="btn blue">儲存</span>。</li>
+    </ul>
+    <p>取消「開放借用」的場地不會出現在總覽表上（例如整修中）。要新增場地，按「＋ 新增場地」。</p>
+  </section>
+
+  <section id="phone">
+    <h2><span class="no">10</span>用手機借</h2>
+    <div class="two">
+      <figure class="phone"><a href="guide/11-mobile.png" target="_blank"><img src="guide/11-mobile.png" alt="手機畫面" loading="lazy"></a><figcaption>手機畫面</figcaption></figure>
+      <div>
+        <p>手機也能用：打開時會<b>自動捲到現在這一節</b>，左右滑動看其他節次，點空格就能借。</p>
+        <p>手機不能拖曳多選，請點一格後在借用視窗裡點選其他節次。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2><span class="no">?</span>常見問題</h2>
+    <details open><summary>「待審核」是什麼意思？什麼時候才算借到？</summary>
+      <p>場地名稱旁標「需審核」的，借用後是 <span class="st wait">待審核</span>，承辦人按核准後變成 <span class="st ok">已借用</span> 才算借到。審核期間這格已經幫你佔住，別人借不走。</p></details>
+    <details><summary>怎麼知道被核准還是被退回？</summary>
+      <p>被退回時，上方「我的預約」會出現紅色數字和退回原因。被核准時，格子會從黃色斜紋變成紫色。</p></details>
+    <details><summary>借錯了怎麼辦？</summary>
+      <p>到「我的預約」按取消，或在總覽表點那一格按「取消這一格」，再重新借一次。</p></details>
+    <details><summary>按確認借用時說「剛被別人借走了」？</summary>
+      <p>你在填資料時，剛好有人先借了同一格。畫面已經更新，請改選其他時段。系統保證同一格不會兩個人同時借到。</p></details>
+    <details><summary>以前在校務系統借的場地還在嗎？</summary>
+      <p>系統上線時已經把校務系統裡「已通過」的預約匯進來，詳細資料會顯示「由舊校務系統匯入」，申請人姓名是校務系統遮罩後的樣子（例如「楊Ｏ祥」）。這些預約本人無法在新系統取消，需要取消請洽管理者。</p></details>
+    <details><summary>要借的場地不在表上？</summary>
+      <p>表上只列開放借用的場地。需要新增場地，請洽資訊組（it@lsps.tp.edu.tw）。</p></details>
+  </section>
+
+  <p style="text-align:center;color:var(--muted);font-size:13px">有問題請洽資訊組（it@lsps.tp.edu.tw）</p>
+</div>
+<a class="top" href="#" aria-label="回到頂端">↑</a>
+</body>
+</html>

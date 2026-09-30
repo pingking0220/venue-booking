@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>力行國小場地預約</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F6F3; --panel:#FFFFFF; --ink:#2B2B28; --muted:#807E76; --line:#E3E1DA;
+  --ok-bg:#EEEDFE; --ok-bd:#AFA9EC; --ok-tx:#3C3489;
+  --wait-bg:#FAEEDA; --wait-bd:#EF9F27; --wait-tx:#633806;
+  --sel:#378ADD; --red:#C0392B; --green:#2E7D4F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px}
+button{font-family:inherit}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:30}
+header h1{font-size:18px;font-weight:700;letter-spacing:.04em;margin-right:8px;white-space:nowrap}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin-right:auto}
+nav button{border:none;background:none;padding:8px 14px;border-radius:8px;font-size:15px;color:var(--muted);cursor:pointer;font-weight:500;position:relative}
+nav button:hover{background:var(--bg);color:var(--ink)}
+nav button.on{background:var(--ink);color:#fff}
+.badge{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:99px;background:var(--red);color:#fff;font-size:12px;line-height:20px;text-align:center}
+#user-pill{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:3px 4px 3px 12px}
+#user-pill b{color:var(--ink);font-weight:500}
+#user-pill button{font-size:12px;padding:4px 11px;border-radius:99px;border:1px solid var(--line);background:var(--panel);cursor:pointer}
+a.help{font-size:14px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:8px}
+a.help:hover{background:var(--bg);color:var(--ink)}
+
+#demo-bar{display:none;background:#FFF6D6;border-bottom:1px solid #EAD68A;padding:6px 20px;font-size:13px;color:#6B5200;align-items:center;gap:10px;flex-wrap:wrap}
+body.demo #demo-bar{display:flex}
+#demo-bar select,#demo-bar button{font-family:inherit;font-size:13px;padding:3px 8px;border-radius:6px;border:1px solid #D9C27A;background:#fff}
+
+main{max-width:1500px;margin:0 auto;padding:16px 20px 60px}
+.view{display:none}
+.view.on{display:block}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.toolbar .title{font-size:20px;font-weight:700;margin:0 6px}
+.tb-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:14px;color:var(--ink)}
+.tb-btn:hover{background:var(--bg)}
+.tb-btn.primary{background:var(--sel);color:#fff;border-color:var(--sel)}
+.tb-btn.danger{background:var(--red);color:#fff;border-color:var(--red)}
+.tb-btn.ok{background:var(--green);color:#fff;border-color:var(--green)}
+.tb-btn:disabled{opacity:.45;cursor:not-allowed}
+input[type=date],input[type=text],input[type=email],input[type=number],select,textarea{font-family:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}
+textarea{resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--sel);box-shadow:0 0 0 3px rgba(55,138,221,.15)}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{padding:5px 11px;border-radius:99px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.today{border-color:var(--sel);color:var(--sel)}
+.chip.on.today{color:#fff}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-left:auto}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:5px;border:1px solid var(--line)}
+.hint{font-size:13px;color:var(--muted);margin:-4px 0 10px}
+
+/* ---- 格子 ---- */
+.grid-wrap{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:calc(100vh - 210px);user-select:none}
+table.grid{border-collapse:separate;border-spacing:0;min-width:100%}
+table.grid th,table.grid td{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+table.grid thead th{position:sticky;top:0;z-index:3;background:#F2F1EC;font-size:13px;font-weight:500;padding:6px 4px;text-align:center;white-space:nowrap}
+table.grid thead th b{display:block;font-size:14px;color:var(--ink)}
+table.grid thead th span{color:var(--muted);font-size:11.5px}
+table.grid thead th.now{background:#DCEBFA}
+table.grid thead th.now b{color:var(--sel)}
+table.grid th.corner{left:0;z-index:5;min-width:150px}
+table.grid tbody th{position:sticky;left:0;z-index:2;background:var(--panel);text-align:left;padding:6px 10px;min-width:150px;font-weight:500}
+table.grid tbody th b{display:block;font-size:14.5px}
+table.grid tbody th span{display:block;font-size:11.5px;color:var(--muted)}
+table.grid tbody th .tag{display:inline-block;font-style:normal;font-size:11px;padding:0 6px;border-radius:99px;background:var(--wait-bg);color:var(--wait-tx);margin-left:4px;vertical-align:1px}
+td.cell{min-width:104px;height:58px;padding:3px;vertical-align:middle;position:relative}
+td.free{cursor:pointer}
+td.free:hover{background:#EAF3FC}
+td.free:hover::after{content:'＋ 借用';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--sel)}
+td.past{background:repeating-linear-gradient(135deg,#F4F3EF 0 6px,#EFEEE9 6px 12px)}
+td.sel{background:#CFE3F8 !important;box-shadow:inset 0 0 0 2px var(--sel)}
+td.sel::after{content:'' !important}
+td.today-col:not(.past){background:#FBFDFF}
+.bk{height:100%;border-radius:7px;padding:4px 7px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;cursor:pointer;border:1.5px solid}
+.bk b{font-size:13px;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-all}
+.bk span{font-size:11.5px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+td.ok .bk{background:var(--ok-bg);border-color:var(--ok-bd);color:var(--ok-tx)}
+td.wait .bk{background:repeating-linear-gradient(135deg,#FAEEDA 0 7px,#F6E3C2 7px 14px);border-color:var(--wait-bd);border-style:dashed;color:var(--wait-tx)}
+td.mine .bk{box-shadow:0 0 0 2px var(--sel)}
+td.past .bk{opacity:.6}
+
+/* ---- 清單 ---- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:10px}
+.card h3{font-size:16px;margin-bottom:4px}
+.card .meta{font-size:13.5px;color:var(--muted);line-height:1.7}
+.card .row{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.card .row .grow{flex:1;min-width:240px}
+.card .acts{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-block;font-size:12px;padding:1px 9px;border-radius:99px;margin-left:6px;vertical-align:2px}
+.pill.ok{background:var(--ok-bg);color:var(--ok-tx)}
+.pill.wait{background:var(--wait-bg);color:var(--wait-tx)}
+details.more summary{cursor:pointer;font-size:13px;color:var(--sel);margin-top:6px}
+details.more ul{list-style:none;margin-top:6px}
+details.more li{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px;padding:4px 0;border-top:1px dashed var(--line)}
+details.more li button{font-size:12px;padding:3px 10px}
+.empty{color:var(--muted);text-align:center;padding:40px 10px;background:var(--panel);border:1px dashed var(--line);border-radius:12px}
+.notice{background:#FDECEA;border:1px solid #F3C1BB;color:#7A2418;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.6}
+.notice .x{margin-left:auto;border:none;background:none;font-size:18px;cursor:pointer;color:#7A2418}
+h2.sec{font-size:17px;margin:18px 0 10px}
+
+/* ---- 場地管理 ---- */
+table.admin{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14px}
+table.admin th,table.admin td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+table.admin th{background:#F2F1EC;font-weight:500;white-space:nowrap}
+table.admin input[type=text],table.admin textarea{width:100%;font-size:14px;padding:5px 8px}
+table.admin input[type=number]{width:60px;font-size:14px;padding:5px}
+table.admin td.c{text-align:center}
+
+/* ---- 對話框 ---- */
+.overlay{display:none;position:fixed;inset:0;background:rgba(43,43,40,.45);z-index:50;align-items:center;justify-content:center;padding:16px}
+.overlay.show{display:flex}
+.modal{background:var(--panel);border-radius:14px;padding:22px 24px;width:min(560px,100%);max-height:90vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.18)}
+.modal h2{font-size:18px;margin-bottom:12px}
+.modal .f{margin-bottom:12px}
+.modal .f label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.modal .f input[type=text],.modal .f textarea{width:100%}
+.modal .btns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.sum{background:var(--bg);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:14px;line-height:1.8}
+.sum b{font-weight:700}
+.warn{background:var(--wait-bg);color:var(--wait-tx);border-radius:10px;padding:8px 12px;font-size:13.5px;line-height:1.7;margin-bottom:10px;white-space:pre-line}
+.conf{color:var(--red);font-size:13px;line-height:1.7}
+.radio{display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+.radio label{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--ink) !important;font-size:14.5px !important}
+dl.kv{display:grid;grid-template-columns:84px 1fr;gap:6px 10px;font-size:14.5px;line-height:1.6;margin-bottom:6px}
+dl.kv dt{color:var(--muted)}
+dl.kv dd{word-break:break-all;white-space:pre-line}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#F7F6F3;padding:10px 20px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:80;max-width:90vw;text-align:center}
+#toast.show{opacity:1}
+
+#login-gate{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#EEEDFE,#E1F5EE);display:flex;align-items:center;justify-content:center;padding:20px}
+body.demo #login-gate{display:none !important}
+.login-card{background:var(--panel);border-radius:18px;padding:40px 36px;box-shadow:0 16px 50px rgba(0,0,0,.15);text-align:center;max-width:380px;width:100%}
+.login-card .logo{font-size:44px;margin-bottom:8px}
+.login-card h2{font-size:20px;margin-bottom:10px}
+.login-card p{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:24px}
+#btn-login{font-size:15px;font-weight:500;padding:12px 26px;border-radius:10px;border:1px solid var(--sel);background:var(--sel);color:#fff;cursor:pointer}
+#login-msg{margin-top:16px;font-size:13px;color:var(--red);min-height:18px;line-height:1.5}
+
+@media (max-width:720px){
+  header{padding:8px 12px}
+  header h1{font-size:16px}
+  nav button{padding:6px 10px;font-size:14px}
+  main{padding:12px 10px 50px}
+  .grid-wrap{max-height:none}
+  table.grid th.corner,table.grid tbody th{min-width:96px;padding:4px 6px}
+  table.grid tbody th b{font-size:13px}
+  td.cell{min-width:86px;height:54px}
+  .legend{margin-left:0}
+}
+@media print{
+  header,#demo-bar,.toolbar .tb-btn,.chips,.hint{display:none !important}
+  .grid-wrap{max-height:none;overflow:visible;border:none}
+}
+</style>
+</head>
+<body>
+
+<div id="demo-bar">🧪 <b>示範模式</b>：資料只存在這台電腦，不會影響正式系統。目前身分：
+  <select id="demo-user" onchange="demoSwitch(this.value)"></select>
+  <button onclick="demoReset()">重設示範資料</button>
+</div>
+
+<header>
+  <h1>🏫 力行國小場地預約</h1>
+  <nav>
+    <button data-v="day" onclick="setView('day')">每日總覽</button>
+    <button data-v="week" onclick="setView('week')">場地週表</button>
+    <button data-v="mine" onclick="setView('mine')">我的預約<span class="badge" id="b-mine" style="display:none"></span></button>
+    <button data-v="approve" id="nav-approve" onclick="setView('approve')" style="display:none">待審核<span class="badge" id="b-approve" style="display:none"></span></button>
+    <button data-v="admin" id="nav-admin" onclick="setView('admin')" style="display:none">場地管理</button>
+  </nav>
+  <a class="help" href="guide.html" target="_blank" rel="noopener">❓ 使用說明</a>
+  <span id="user-pill" style="display:none"><b id="user-name"></b><span id="user-unit"></span><button onclick="signOutUser()">登出</button></span>
+</header>
+
+<main>
+  <!-- 每日總覽：場地 × 節次 -->
+  <section class="view" id="view-day">
+    <div class="toolbar">
+      <button class="tb-btn" onclick="shiftDay(-1)" aria-label="前一天">◀</button>
+      <span class="title" id="day-title"></span>
+      <button class="tb-btn" onclick="shiftDay(1)" aria-label="後一天">▶</button>
+      <button class="tb-btn" onclick="gotoDay(todayStr())">今天</button>
+      <input type="date" id="day-pick" onchange="gotoDay(this.value)">
+      <div class="chips" id="day-chips"></div>
+      <div class="legend"><span><i style="background:#fff"></i>空檔</span><span><i style="background:var(--ok-bg);border-color:var(--ok-bd)"></i>已借用</span><span><i style="background:var(--wait-bg);border-color:var(--wait-bd);border-style:dashed"></i>待審核</span><span><i style="box-shadow:0 0 0 2px var(--sel) inset"></i>我借的</span></div>
+    </div>
+    <p class="hint">點空格就能借用；用滑鼠拖曳可一次選好幾格。點已借用的格子看詳細資料。</p>
+    <div class="grid-wrap"><div id="day-grid"></div></div>
+  </section>
+
+  <!-- 場地週表：單一場地 × 一週 -->
+  <section class="view" id="view-week">
+    <div class="toolbar">
+      <select id="week-place" onchange="weekPid=this.value;render()"></select>
+      <button class="tb-btn" onclick="shiftWeek(-1)" aria-label="上一週">◀</button>
+      <span class="title" id="week-title"></span>
+      <button class="tb-btn" onclick="shiftWeek(1)" aria-label="下一週">▶</button>
+      <button class="tb-btn" onclick="weekStart=mondayOf(todayStr());render()">本週</button>
+      <label style="font-size:14px;display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="week-weekend" onchange="showWeekend=this.checked;render()">顯示週末</label>
+      <div class="legend"><span><i style="background:var(--ok-bg);border-color:var(--ok-bd)"></i>已借用</span><span><i style="background:var(--wait-bg);border-color:var(--wait-bd);border-style:dashed"></i>待審核</span><span><i style="box-shadow:0 0 0 2px var(--sel) inset"></i>我借的</span></div>
+    </div>
+    <p class="hint">適合排固定課程：拖曳選好這週要用的節次，勾「每週重複」就能一次借到學期末。</p>
+    <div id="week-notes"></div>
+    <div class="grid-wrap"><div id="week-grid"></div></div>
+  </section>
+
+  <!-- 我的預約 -->
+  <section class="view" id="view-mine">
+    <div id="mine-notices"></div>
+    <div id="mine-list"></div>
+  </section>
+
+  <!-- 待審核 -->
+  <section class="view" id="view-approve">
+    <div id="approve-list"></div>
+  </section>
+
+  <!-- 場地管理 -->
+  <section class="view" id="view-admin">
+    <div class="card">
+      <div class="row" style="align-items:center">
+        <div class="grow"><b>學期結束日</b><div class="meta">「每週重複」預設借到這一天。</div></div>
+        <input type="date" id="cfg-semend">
+        <button class="tb-btn primary" onclick="saveConfig()">儲存</button>
+      </div>
+    </div>
+    <div class="toolbar"><h2 class="sec" style="margin:8px 0">場地清單</h2><button class="tb-btn" onclick="addPlace()">＋ 新增場地</button></div>
+    <p class="hint">審核人：填學校帳號 email，多位用逗號分開。「需審核」的場地如果沒有指定審核人，會由管理者審核。改完按該列的「儲存」。</p>
+    <div style="overflow-x:auto"><table class="admin" id="admin-table"></table></div>
+  </section>
+</main>
+
+<!-- 借用對話框 -->
+<div class="overlay" id="book-ov"><div class="modal">
+  <h2>借用場地</h2>
+  <div class="sum" id="book-sum"></div>
+  <div class="f" id="book-slots-wrap"><label>節次（可再點選加借其他節）</label><div class="chips" id="book-slots"></div></div>
+  <div class="f"><label>活動名稱 *</label><input type="text" id="book-title" maxlength="60" placeholder="例：三年級健康促進宣導"></div>
+  <div class="f"><label>申請單位</label><input type="text" id="book-unit" maxlength="30" placeholder="例：學務處衛生組"></div>
+  <div class="f"><label>實際使用時間（選填，不填就是整節）</label><input type="text" id="book-time" maxlength="20" placeholder="例：18:30-20:30"></div>
+  <div class="f"><label>備註（選填）</label><textarea id="book-note" rows="2" maxlength="200"></textarea></div>
+  <div class="f"><label>重複</label>
+    <div class="radio">
+      <label><input type="radio" name="rep" value="once" checked onchange="renderBookSummary()">只借這次</label>
+      <label><input type="radio" name="rep" value="weekly" onchange="renderBookSummary()">每週重複，直到 <input type="date" id="book-until" onchange="renderBookSummary()" onclick="document.querySelector('input[name=rep][value=weekly]').checked=true"></label>
+    </div>
+  </div>
+  <div id="book-check"></div>
+  <div class="btns"><button class="tb-btn" onclick="closeOv('book-ov')">取消</button><button class="tb-btn primary" id="book-ok" onclick="submitBooking()">確認借用</button></div>
+</div></div>
+
+<!-- 詳細資料對話框 -->
+<div class="overlay" id="detail-ov"><div class="modal">
+  <h2 id="detail-title"></h2>
+  <dl class="kv" id="detail-kv"></dl>
+  <div class="btns" id="detail-btns"></div>
+</div></div>
+
+<!-- 輸入原因 -->
+<div class="overlay" id="ask-ov"><div class="modal" style="width:min(420px,100%)">
+  <h2 id="ask-title"></h2>
+  <div class="f"><textarea id="ask-text" rows="3" maxlength="100" style="width:100%"></textarea></div>
+  <div class="btns"><button class="tb-btn" id="ask-cancel">取消</button><button class="tb-btn danger" id="ask-ok">確定</button></div>
+</div></div>
+
+<div id="login-gate">
+  <div class="login-card">
+    <div class="logo">🏫</div>
+    <h2>力行國小場地預約</h2>
+    <p>請使用學校 Google 帳號登入<br><b>@lsps.tp.edu.tw</b></p>
+    <button id="btn-login" onclick="signIn()">使用 Google 帳號登入</button>
+    <div id="login-msg"></div>
+    <div style="margin-top:14px;font-size:13px"><a href="guide.html" target="_blank" rel="noopener" style="color:var(--muted)">第一次使用？看操作說明</a></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="application/json" id="seed-places">{"e155": {"name": "視聽教室", "site": "忠信樓1F", "order": 1, "active": true, "needApproval": false, "notes": "用完請將設備完全關閉"}, "e150": {"name": "209電腦教室", "site": "209", "order": 2, "active": true, "needApproval": false, "notes": "1.請注意該節課是否有資訊課的問題。\n2.不須審核。若有重復，看申請者是誰協調處理。"}, "e152": {"name": "211電腦教室", "site": "211", "order": 3, "active": true, "needApproval": true, "notes": ""}, "e156": {"name": "2樓會議室", "site": "力行樓", "order": 4, "active": true, "needApproval": true, "notes": "室內各項電源設備，請於使用完畢後，記得關畢，以維護使用安全"}, "e159": {"name": "穿堂", "site": "力行樓一樓", "order": 5, "active": true, "needApproval": true, "notes": ""}, "e175": {"name": "419多功能教室", "site": "勤學樓四樓", "order": 6, "active": true, "needApproval": true, "notes": "1.場地使用以教務處課後班相關使用為主。\n2.使用場地需有教師在現場管理，鑰匙請向總務處或教務處借用。\n3.午休時間請勿大聲喧嘩。\n4.使用結束後東西請歸位並關好門。"}, "e176": {"name": "420訊育教室", "site": "勤學樓四樓", "order": 7, "active": true, "needApproval": true, "notes": "1.場地使用以學務處劇團及社團相關使用為主。\n2.使用場地需有教師在現場管理，鑰匙請向總務處或學務處借用。\n3.午休時間請勿大聲喧嘩。\n4.使用結束後東西請歸位並關好門。"}, "e177": {"name": "421學籍檔案", "site": "勤學樓四樓", "order": 8, "active": true, "needApproval": true, "notes": "1.場地使用以輔導室團體輔導或個別晤談相關使用為主。\n2.使用場地需有教師在現場管理，鑰匙請向總務處或輔導室借用。\n3.午休時間請勿大聲喧嘩。\n4.使用結束後東西請歸位並關好門。"}, "e178": {"name": "321特色教室", "site": "勤學樓3樓", "order": 9, "active": true, "needApproval": true, "notes": ""}, "e179": {"name": "322特色教室", "site": "勤學樓3樓", "order": 10, "active": true, "needApproval": true, "notes": ""}, "e180": {"name": "409社會教室", "site": "力行樓4樓", "order": 11, "active": true, "needApproval": true, "notes": ""}, "e170": {"name": "214美勞教室", "site": "214", "order": 12, "active": true, "needApproval": true, "notes": ""}, "e154": {"name": "交通安全中心", "site": "力行樓地下室", "order": 13, "active": true, "needApproval": true, "notes": "1.使用場地需有教師在現場管理。\n2.午休時間請勿大聲喧嘩。\n3.使用結束後東西請歸位並關好門。"}, "e153": {"name": "快樂兒童中心", "site": "勤學樓地下室", "order": 14, "active": true, "needApproval": true, "notes": "1.使用場地需有教師在現場管理。\n2.午休時間請勿大聲喧嘩。\n3.器材使用結束後請務必歸還"}, "e168": {"name": "桌球教室", "site": "力行樓地下室", "order": 15, "active": true, "needApproval": true, "notes": "借用後，請保持教室清潔。"}, "e158": {"name": "樂活教室", "site": "懷恩地下室", "order": 16, "active": true, "needApproval": true, "notes": ""}, "e157": {"name": "教師會辦公室", "site": "力行樓一樓", "order": 17, "active": true, "needApproval": true, "notes": ""}, "e182": {"name": "輔導室諮商室", "site": "輔導室", "order": 18, "active": true, "needApproval": true, "notes": "愛惜使用"}}</script>
+<script>
+/* ============================================================
+   力行國小場地預約
+   資料庫與登入沿用頒獎座位系統的 Firebase 專案 award-seat（同一套 /roles 身分）。
+   安全規則在 award-seating 專案的 database.rules.json（venue 節點），請在那邊修改與部署。
+   網址加 ?demo 進入示範模式：不連 Firebase，資料只存在瀏覽器（測試、截圖用）。
+============================================================ */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCq54PZl6uYgW4Tei-BBZr_uMmfn9AWILk",
+  authDomain: "award-seat.firebaseapp.com",
+  databaseURL: "https://award-seat-default-rtdb.firebaseio.com",
+  projectId: "award-seat",
+  storageBucket: "award-seat.firebasestorage.app",
+  messagingSenderId: "848306139968",
+  appId: "1:848306139968:web:48d02efaf32161a5f240a5",
+};
+const SCHOOL_DOMAIN = 'lsps.tp.edu.tw';
+const ADMIN_CONTACT = 'it@' + SCHOOL_DOMAIN;
+const DEMO = new URLSearchParams(location.search).has('demo');
+
+/* 節次（依校務系統既有預約推得，2026-09 經資訊組長確認）；放學後／晚上給課後與晚間活動 */
+const SLOTS = [
+  { k: 'm',   label: '早自習', s: '08:00', e: '08:40' },
+  { k: 'p1',  label: '第1節',  s: '08:40', e: '09:20' },
+  { k: 'p2',  label: '第2節',  s: '09:30', e: '10:10' },
+  { k: 'p3',  label: '第3節',  s: '10:30', e: '11:10' },
+  { k: 'p4',  label: '第4節',  s: '11:20', e: '12:00' },
+  { k: 'nap', label: '午休',   s: '12:40', e: '13:20' },
+  { k: 'p5',  label: '第5節',  s: '13:25', e: '14:05' },
+  { k: 'p6',  label: '第6節',  s: '14:15', e: '14:55' },
+  { k: 'p7',  label: '第7節',  s: '15:15', e: '15:55' },
+  { k: 'aft', label: '放學後', s: '16:00', e: '18:00' },
+  { k: 'eve', label: '晚上',   s: '18:00', e: '21:00' },
+];
+const SLOT = Object.fromEntries(SLOTS.map((s, i) => [s.k, Object.assign({ i: i }, s)]));
+const WD = '日一二三四五六';
+const DEPT_LABEL = { edu: '教務處', stu: '學務處', cou: '輔導室', kin: '幼兒園', admin: '' };
+const LIVE_BACK_DAYS = 31;      // 即時同步：今天往前 31 天起的所有預約；更早的日期按需讀取
+
+let me = { email: '', ek: '', name: '', role: null };
+let places = {}, config = {}, bk = {}, pastCache = {}, notices = {};
+let view = 'day', curDate = todayStr(), weekStart = mondayOf(todayStr()), weekPid = null, showWeekend = false;
+let liveFrom = addDays(todayStr(), -LIVE_BACK_DAYS);
+
+/* ---------- 小工具 ---------- */
+function pad(n) { return String(n).padStart(2, '0'); }
+function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function parseYmd(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+function addDays(s, n) { const d = parseYmd(s); d.setDate(d.getDate() + n); return ymd(d); }
+function todayStr() { return ymd(new Date()); }
+function nowHM() { const d = new Date(); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+function mondayOf(s) { const d = parseYmd(s); d.setDate(d.getDate() - (d.getDay() + 6) % 7); return ymd(d); }
+function mdLabel(s) { const d = parseYmd(s); return (d.getMonth() + 1) + '/' + d.getDate() + '（' + WD[d.getDay()] + '）'; }
+function isPast(date, slot) { const t = todayStr(); return date < t || (date === t && SLOT[slot].e <= nowHM()); }
+function ekOf(email) { return String(email || '').toLowerCase().replace(/\./g, ','); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function getBk(date, pid, slot) { const src = bk[date] || pastCache[date]; return (src && src[pid] && src[pid][slot]) || null; }
+function isAdmin() { return me.role === 'admin'; }
+function approversOf(pid) { return (places[pid] && places[pid].approvers) || {}; }
+/* 需審核但沒指定審核人的場地 → 由管理者審核 */
+function isApproverOf(pid) { return isAdmin() || !!approversOf(pid)[me.ek]; }
+function isApproverAny() { return isAdmin() || Object.keys(places).some(p => approversOf(p)[me.ek]); }
+function placeName(pid) { return places[pid] ? places[pid].name : '（已刪除的場地）'; }
+function sortedPlaces(all) {
+  return Object.keys(places).filter(p => all || places[p].active)
+    .sort((a, b) => ((places[a].order || 99) - (places[b].order || 99)) || places[a].name.localeCompare(places[b].name));
+}
+function semesterEnd() {
+  if (config.semesterEnd) return config.semesterEnd;
+  const d = new Date(), y = d.getFullYear(), m = d.getMonth() + 1;
+  return m >= 8 ? (y + 1) + '-01-20' : (m === 1 ? y + '-01-20' : y + '-06-30');
+}
+function slotRange(keys) {
+  const ks = keys.slice().sort((a, b) => SLOT[a].i - SLOT[b].i);
+  return ks.map(k => SLOT[k].label).join('、');
+}
+/* 走訪所有已載入的預約 */
+function eachBooking(fn) {
+  [bk, pastCache].forEach(src => Object.keys(src).forEach(date => {
+    if (src === pastCache && bk[date]) return;
+    const day = src[date] || {};
+    Object.keys(day).forEach(pid => Object.keys(day[pid] || {}).forEach(slot => { if (SLOT[slot]) fn(date, pid, slot, day[pid][slot]); }));
+  }));
+}
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+function openOv(id) { document.getElementById(id).classList.add('show'); }
+function closeOv(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o && o.id !== 'ask-ov') closeOv(o.id); }));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.overlay.show').forEach(o => { if (o.id !== 'ask-ov') closeOv(o.id); }); });
+
+function askText(title, placeholder) {
+  return new Promise(resolve => {
+    document.getElementById('ask-title').textContent = title;
+    const ta = document.getElementById('ask-text'); ta.value = ''; ta.placeholder = placeholder || '';
+    const done = v => { closeOv('ask-ov'); resolve(v); };
+    document.getElementById('ask-ok').onclick = () => done(ta.value.trim());
+    document.getElementById('ask-cancel').onclick = () => done(null);
+    openOv('ask-ov'); setTimeout(() => ta.focus(), 50);
+  });
+}
+
+/* ============================================================
+   資料層：雲端（Firebase）或示範模式（瀏覽器）
+   路徑都相對於 venue/：places/{pid}、config、bk/{日期}/{pid}/{節次}、notice/{ek}/{id}
+============================================================ */
+const store = {
+  root: null,
+  ts() { return DEMO ? Date.now() : firebase.database.ServerValue.TIMESTAMP; },
+  newId() { return DEMO ? 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) : this.root.push().key; },
+  /* 新增預約：任何一格已被借走就整批失敗（雲端由安全規則保證，示範模式自己檢查） */
+  create(payload) {
+    if (DEMO) {
+      if (Object.keys(payload).some(p => demoGet(p) != null)) return Promise.reject(new Error('conflict'));
+      return demoApply(payload);
+    }
+    return this.root.update(payload);
+  },
+  update(payload) { return DEMO ? demoApply(payload) : this.root.update(payload); },
+  pushNotice(ek, obj) {
+    if (DEMO) return demoApply({ ['notice/' + ek + '/' + this.newId()]: obj });
+    return this.root.child('notice/' + ek).push(obj);
+  },
+  loadDate(date) {
+    if (DEMO) { pastCache[date] = (demoData.bk || {})[date] || {}; return Promise.resolve(); }
+    return this.root.child('bk/' + date).once('value').then(s => { pastCache[date] = s.val() || {}; });
+  },
+};
+
+/* ---------- 雲端 ---------- */
+let auth = null;
+function initCloud() {
+  try {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    auth = firebase.auth();
+    store.root = firebase.database().ref('venue');
+    auth.onAuthStateChanged(handleAuth);
+  } catch (e) {
+    document.getElementById('login-msg').textContent = '系統初始化失敗，請重新整理。';
+  }
+}
+function signIn() {
+  if (/\bLine\//i.test(navigator.userAgent) || /FBAN|FBAV|Instagram/i.test(navigator.userAgent)) {
+    document.getElementById('login-msg').innerHTML = 'LINE／Facebook 內建瀏覽器無法登入 Google，<br>請點右上角「⋯」選「用瀏覽器開啟」。';
+    return;
+  }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ hd: SCHOOL_DOMAIN, prompt: 'select_account' });
+  auth.signInWithPopup(provider).catch(err => {
+    const c = err.code || '';
+    document.getElementById('login-msg').textContent =
+      c === 'auth/popup-blocked' ? '登入視窗被擋住了，請允許彈出視窗後再按一次。' :
+      c === 'auth/popup-closed-by-user' ? '登入視窗已關閉，請再按一次登入。' : '登入失敗：' + (c || err.message);
+  });
+}
+function signOutUser() { if (DEMO) return; auth.signOut(); }
+let listeners = [];
+function handleAuth(user) {
+  listeners.forEach(off => off()); listeners = [];
+  if (!user) { document.getElementById('login-gate').style.display = 'flex'; document.getElementById('user-pill').style.display = 'none'; return; }
+  const email = (user.email || '').toLowerCase();
+  if (!email.endsWith('@' + SCHOOL_DOMAIN)) {
+    document.getElementById('login-msg').textContent = '請使用學校帳號（@' + SCHOOL_DOMAIN + '）登入。';
+    auth.signOut(); return;
+  }
+  me = { email: email, ek: ekOf(email), name: user.displayName || email.split('@')[0], role: null };
+  firebase.database().ref('roles/' + me.ek).once('value').then(s => { me.role = s.val() || null; }).catch(() => {}).then(() => {
+    document.getElementById('login-gate').style.display = 'none';
+    startListening();
+  });
+}
+function startListening() {
+  const on = (ref, fn) => { ref.on('value', s => { fn(s.val()); render(); }, err => toast('讀取失敗：' + (err.code || ''))); listeners.push(() => ref.off()); };
+  on(store.root.child('places'), v => { places = v || {}; });
+  on(store.root.child('config'), v => { config = v || {}; });
+  on(store.root.child('bk').orderByKey().startAt(liveFrom), v => { bk = v || {}; });
+  on(store.root.child('notice/' + me.ek), v => { notices = v || {}; });
+  updateUserPill();
+}
+function updateUserPill() {
+  document.getElementById('user-name').textContent = me.name;
+  document.getElementById('user-unit').textContent = isAdmin() ? '管理者' : (DEPT_LABEL[me.role] || '');
+  document.getElementById('user-pill').style.display = '';
+}
+
+/* ---------- 示範模式 ---------- */
+let demoData = null;
+const DEMO_KEY = 'venue_demo_v1';
+const DEMO_USERS = {
+  teacher: { email: 'teacher-a@lsps.tp.edu.tw', name: '王小明老師', role: 'edu' },
+  approver: { email: 'teacher-b@lsps.tp.edu.tw', name: '陳組長（總務處）', role: null },
+  admin: { email: 'it@lsps.tp.edu.tw', name: '資訊組長', role: 'admin' },
+};
+function demoGet(path) { return path.split('/').reduce((o, k) => (o == null ? undefined : o[k]), demoData); }
+function demoApply(payload) {
+  Object.keys(payload).forEach(path => {
+    const parts = path.split('/'); let o = demoData;
+    for (let i = 0; i < parts.length - 1; i++) { if (o[parts[i]] == null || typeof o[parts[i]] !== 'object') o[parts[i]] = {}; o = o[parts[i]]; }
+    const last = parts[parts.length - 1];
+    if (payload[path] === null) delete o[last]; else o[last] = JSON.parse(JSON.stringify(payload[path]));
+  });
+  prune(demoData);
+  try { localStorage.setItem(DEMO_KEY, JSON.stringify(demoData)); } catch (e) {}
+  demoRefresh();
+  return Promise.resolve();
+}
+function prune(o) { Object.keys(o).forEach(k => { if (o[k] && typeof o[k] === 'object') { prune(o[k]); if (!Object.keys(o[k]).length) delete o[k]; } }); }
+function demoRefresh() {
+  places = JSON.parse(JSON.stringify(demoData.places || {}));
+  config = demoData.config || {};
+  bk = {}; Object.keys(demoData.bk || {}).forEach(d => { if (d >= liveFrom) bk[d] = demoData.bk[d]; });
+  notices = (demoData.notice || {})[me.ek] || {};
+  render();
+}
+function demoSeed() {
+  const mon = mondayOf(todayStr()), d = n => addDays(mon, n);
+  const places = JSON.parse(document.getElementById('seed-places').textContent);
+  Object.keys(places).forEach(pid => { if (places[pid].needApproval) places[pid].approvers = { 'teacher-b@lsps,tp,edu,tw': true }; });
+  const data = { places: places, config: { semesterEnd: semesterEnd() }, bk: {}, notice: {} };
+  const put = (date, pid, slot, rec) => { data.bk[date] = data.bk[date] || {}; data.bk[date][pid] = data.bk[date][pid] || {}; data.bk[date][pid][slot] = Object.assign({ at: Date.now(), status: 'ok' }, rec); };
+  // 資訊課：每週固定，一路到學期末
+  const itClasses = [[0, 'p2', '405資訊課'], [0, 'p4', '305資訊課'], [0, 'p5', '404資訊課'], [1, 'p3', '304資訊課'], [1, 'p6', '302資訊課'], [2, 'p2', '303資訊課'], [3, 'p3', '301資訊課'], [3, 'p7', '401資訊課']];
+  for (let w = -2; w < 20; w++) itClasses.forEach(([dd, slot, title]) => {
+    const date = d(w * 7 + dd); if (date > data.config.semesterEnd) return;
+    put(date, 'e150', slot, { title: title, by: 'yang@lsps.tp.edu.tw', name: '楊明祥', unit: '教務處資訊', series: 'it-' + slot + dd });
+  });
+  put(d(1), 'e155', 'p2', { title: '三年級健康促進宣導', by: 'health@lsps.tp.edu.tw', name: '孫錦梅', unit: '學務處衛生組' });
+  put(d(1), 'e155', 'aft', { title: '直笛隊賽前訓練', by: 'music@lsps.tp.edu.tw', name: '林老師', unit: '學務處訓育組', time: '16:00-18:00' });
+  put(d(1), 'e155', 'eve', { title: '家代大會', by: 'huang@lsps.tp.edu.tw', name: '黃主任', unit: '輔導室', time: '18:00-21:00' });
+  put(d(2), 'e155', 'm', { title: 'English Corner 晨光時間', by: 'teach@lsps.tp.edu.tw', name: '丁怡', unit: '教務處教學組' });
+  put(d(4), 'e155', 'p7', { title: '五年級菸害防制宣導', by: 'health@lsps.tp.edu.tw', name: '孫錦梅', unit: '學務處衛生組' });
+  put(d(2), 'e156', 'p5', { title: '國語領域會議', by: 'teacher-a@lsps.tp.edu.tw', name: '王小明老師', unit: '教務處', status: 'wait' });
+  for (let i = 0; i < 5; i++) put(d(i + 7), 'e154', 'nap', { title: '環境知識ㄐㄩㄠˋ', by: 'env@lsps.tp.edu.tw', name: '張老師', unit: '學務處', status: 'wait', series: 'env1' });
+  put(d(3), 'e175', 'p5', { title: '課後班', by: 'teach@lsps.tp.edu.tw', name: '丁怡', unit: '教務處' });
+  put(d(3), 'e175', 'p6', { title: '課後班', by: 'teach@lsps.tp.edu.tw', name: '丁怡', unit: '教務處' });
+  return data;
+}
+function demoInit() {
+  document.body.classList.add('demo');
+  try { demoData = JSON.parse(localStorage.getItem(DEMO_KEY) || 'null'); } catch (e) { demoData = null; }
+  if (!demoData) { demoData = demoSeed(); try { localStorage.setItem(DEMO_KEY, JSON.stringify(demoData)); } catch (e) {} }
+  const sel = document.getElementById('demo-user');
+  sel.innerHTML = Object.keys(DEMO_USERS).map(k => '<option value="' + k + '">' + DEMO_USERS[k].name + '</option>').join('');
+  let who = 'teacher'; try { who = localStorage.getItem('venue_demo_user') || 'teacher'; } catch (e) {}
+  sel.value = who; demoSwitch(who);
+}
+function demoSwitch(k) {
+  const u = DEMO_USERS[k] || DEMO_USERS.teacher;
+  me = { email: u.email, ek: ekOf(u.email), name: u.name, role: u.role };
+  try { localStorage.setItem('venue_demo_user', k); } catch (e) {}
+  updateUserPill(); demoRefresh();
+}
+function demoReset() { demoData = demoSeed(); try { localStorage.setItem(DEMO_KEY, JSON.stringify(demoData)); } catch (e) {} demoRefresh(); toast('示範資料已重設'); }
+
+/* ============================================================
+   畫面
+============================================================ */
+function setView(v) { view = v; render(); window.scrollTo(0, 0); }
+function render() {
+  document.getElementById('nav-approve').style.display = isApproverAny() ? '' : 'none';
+  document.getElementById('nav-admin').style.display = isAdmin() ? '' : 'none';
+  if ((view === 'approve' && !isApproverAny()) || (view === 'admin' && !isAdmin())) view = 'day';
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.v === view));
+  document.querySelectorAll('.view').forEach(s => s.classList.toggle('on', s.id === 'view-' + view));
+  updateBadges();
+  if (view === 'day') renderDay();
+  else if (view === 'week') renderWeek();
+  else if (view === 'mine') renderMine();
+  else if (view === 'approve') renderApprove();
+  else if (view === 'admin') renderAdmin();
+  if (document.getElementById('book-ov').classList.contains('show')) {   // 借用對話框開著時，資料一變就重算（別人剛借走會立刻看到）
+    const cur = shownConflicts; renderBookSummary(); shownConflicts = cur;
+  }
+}
+function waitingForMe() {
+  const t = todayStr(), list = [];
+  eachBooking((date, pid, slot, b) => { if (b.status === 'wait' && date >= t && isApproverOf(pid)) list.push({ date: date, pid: pid, slot: slot, b: b }); });
+  return list;
+}
+function updateBadges() {
+  const n = waitingForMe().length, ba = document.getElementById('b-approve');
+  ba.textContent = n; ba.style.display = n ? '' : 'none';
+  const nn = Object.keys(notices || {}).length, bm = document.getElementById('b-mine');
+  bm.textContent = nn; bm.style.display = nn ? '' : 'none';
+}
+
+/* ---------- 格子（每日總覽與週表共用） ---------- */
+function cellHtml(date, pid, slot, r, c, extraCls) {
+  const b = getBk(date, pid, slot), past = isPast(date, slot);
+  const cls = ['cell']; let inner = '', tip = '';
+  if (extraCls) cls.push(extraCls);
+  if (b) {
+    cls.push(b.status === 'wait' ? 'wait' : 'ok');
+    if (b.by === me.email) cls.push('mine');
+    if (past) cls.push('past');
+    inner = '<div class="bk"><b>' + esc(b.title) + '</b><span>' + esc(b.name || '') + (b.status === 'wait' ? '・待審核' : '') + '</span></div>';
+    tip = b.title + '\n' + (b.name || '') + (b.unit ? '（' + b.unit + '）' : '') + (b.time ? '\n' + b.time : '') + (b.status === 'wait' ? '\n待審核' : '');
+  } else cls.push(past ? 'past' : 'free');
+  return '<td class="' + cls.join(' ') + '" data-date="' + date + '" data-pid="' + pid + '" data-slot="' + slot + '" data-r="' + r + '" data-c="' + c + '" title="' + esc(tip) + '">' + inner + '</td>';
+}
+function slotHeader(s, now) { return '<th class="' + (now ? 'now' : '') + '"><b>' + s.label + '</b><span>' + s.s + '–' + s.e + '</span></th>'; }
+function currentSlot() { const t = nowHM(); const s = SLOTS.find(x => x.s <= t && t < x.e); return s ? s.k : null; }
+function ensureLoaded(dates) {
+  const need = dates.filter(d => d < liveFrom && !pastCache[d]);
+  if (need.length) Promise.all(need.map(d => store.loadDate(d))).then(render);
+}
+
+function renderDay() {
+  ensureLoaded([curDate]);
+  const t = todayStr();
+  document.getElementById('day-title').textContent = mdLabel(curDate).replace('（', ' 星期').replace('）', '') + (curDate === t ? '　今天' : '');
+  document.getElementById('day-pick').value = curDate;
+  const mon = mondayOf(curDate);
+  document.getElementById('day-chips').innerHTML = [0, 1, 2, 3, 4].map(i => {
+    const d = addDays(mon, i);
+    return '<button class="chip' + (d === curDate ? ' on' : '') + (d === t ? ' today' : '') + '" onclick="gotoDay(\'' + d + '\')">週' + WD[parseYmd(d).getDay()] + ' ' + (parseYmd(d).getMonth() + 1) + '/' + parseYmd(d).getDate() + '</button>';
+  }).join('');
+  const nowSlot = curDate === t ? currentSlot() : null;
+  const pids = sortedPlaces();
+  let h = '<table class="grid"><thead><tr><th class="corner">場地</th>' + SLOTS.map(s => slotHeader(s, s.k === nowSlot)).join('') + '</tr></thead><tbody>';
+  pids.forEach((pid, r) => {
+    const p = places[pid];
+    h += '<tr><th><b>' + esc(p.name) + (p.needApproval ? '<i class="tag">需審核</i>' : '') + '</b><span>' + esc(p.site || '') + '</span></th>';
+    SLOTS.forEach((s, c) => { h += cellHtml(curDate, pid, s.k, r, c); });
+    h += '</tr>';
+  });
+  if (!pids.length) h += '<tr><td class="cell" colspan="' + (SLOTS.length + 1) + '" style="text-align:center;color:var(--muted)">還沒有場地資料</td></tr>';
+  document.getElementById('day-grid').innerHTML = h + '</tbody></table>';
+  /* 換到今天時，把畫面捲到目前這一節（手機上尤其有用）；同一天內重畫不動使用者的捲動位置 */
+  if (scrolledFor !== curDate) {
+    scrolledFor = curDate;
+    const wrap = document.querySelector('#view-day .grid-wrap'), nowTh = document.querySelector('#day-grid thead th.now'), corner = document.querySelector('#day-grid th.corner');
+    wrap.scrollLeft = nowTh && corner ? Math.max(0, nowTh.offsetLeft - corner.offsetWidth - 8) : 0;
+  }
+}
+let scrolledFor = null;
+function gotoDay(d) { if (d) { curDate = d; render(); } }
+function shiftDay(n) {
+  let d = addDays(curDate, n);
+  while ([0, 6].includes(parseYmd(d).getDay())) d = addDays(d, n);   // 跳過週末
+  gotoDay(d);
+}
+
+function weekDays() { return showWeekend ? [-1, 0, 1, 2, 3, 4, 5].map(i => addDays(weekStart, i)) : [0, 1, 2, 3, 4].map(i => addDays(weekStart, i)); }
+function renderWeek() {
+  const pids = sortedPlaces();
+  if (!weekPid || !places[weekPid] || !places[weekPid].active) weekPid = pids[0];
+  const sel = document.getElementById('week-place');
+  sel.innerHTML = pids.map(p => '<option value="' + p + '">' + esc(places[p].name) + (places[p].needApproval ? '（需審核）' : '') + '</option>').join('');
+  sel.value = weekPid || '';
+  document.getElementById('week-weekend').checked = showWeekend;
+  const days = weekDays(), t = todayStr();
+  ensureLoaded(days);
+  document.getElementById('week-title').textContent = mdLabel(days[0]).replace(/（.）/, '') + ' – ' + mdLabel(days[days.length - 1]).replace(/（.）/, '');
+  const p = places[weekPid];
+  document.getElementById('week-notes').innerHTML = p && (p.notes || p.needApproval)
+    ? '<div class="warn">' + (p.needApproval ? '此場地需經審核，送出後為「待審核」，核准後才生效。\n' : '') + (p.notes ? '借用注意事項：\n' + esc(p.notes) : '') + '</div>' : '';
+  if (!weekPid) { document.getElementById('week-grid').innerHTML = '<div class="empty">還沒有場地資料</div>'; return; }
+  let h = '<table class="grid"><thead><tr><th class="corner">節次</th>' + days.map(d => '<th class="' + (d === t ? 'now' : '') + '"><b>' + mdLabel(d) + '</b><span>' + (d === t ? '今天' : '&nbsp;') + '</span></th>').join('') + '</tr></thead><tbody>';
+  SLOTS.forEach((s, r) => {
+    h += '<tr><th><b>' + s.label + '</b><span>' + s.s + '–' + s.e + '</span></th>';
+    days.forEach((d, c) => { h += cellHtml(d, weekPid, s.k, r, c, d === t ? 'today-col' : ''); });
+    h += '</tr>';
+  });
+  document.getElementById('week-grid').innerHTML = h + '</tbody></table>';
+}
+function shiftWeek(n) { weekStart = addDays(weekStart, 7 * n); render(); }
+
+/* ---------- 點選與拖曳框選 ---------- */
+let selA = null, dragging = false;
+function cellRef(td) { return { date: td.dataset.date, pid: td.dataset.pid, slot: td.dataset.slot }; }
+function clearSel() { document.querySelectorAll('td.sel').forEach(td => td.classList.remove('sel')); }
+function markRect(grid, a, b) {
+  const r1 = Math.min(a.r, b.r), r2 = Math.max(a.r, b.r), c1 = Math.min(a.c, b.c), c2 = Math.max(a.c, b.c);
+  grid.querySelectorAll('td.cell').forEach(td => {
+    const r = +td.dataset.r, c = +td.dataset.c;
+    td.classList.toggle('sel', td.classList.contains('free') && r >= r1 && r <= r2 && c >= c1 && c <= c2);
+  });
+}
+['day-grid', 'week-grid'].forEach(id => {
+  const grid = document.getElementById(id);
+  grid.addEventListener('mousedown', e => {
+    const td = e.target.closest('td.cell');
+    if (!td || e.button !== 0 || !td.classList.contains('free')) return;
+    selA = { grid: grid, r: +td.dataset.r, c: +td.dataset.c, x: e.clientX, y: e.clientY };
+    dragging = false; e.preventDefault();
+  });
+  grid.addEventListener('click', e => {
+    if (dragging) return;
+    const td = e.target.closest('td.cell'); if (!td) return;
+    if (td.classList.contains('free')) openBooking([cellRef(td)]);
+    else if (td.classList.contains('ok') || td.classList.contains('wait')) openDetail(cellRef(td));
+  });
+});
+document.addEventListener('mousemove', e => {
+  if (!selA) return;
+  if (!dragging && Math.abs(e.clientX - selA.x) + Math.abs(e.clientY - selA.y) < 8) return;
+  dragging = true;
+  const el = document.elementFromPoint(e.clientX, e.clientY), td = el && el.closest('td.cell');
+  if (td && selA.grid.contains(td)) markRect(selA.grid, selA, { r: +td.dataset.r, c: +td.dataset.c });
+});
+document.addEventListener('mouseup', () => {
+  if (!selA) return;
+  const grid = selA.grid; selA = null;
+  if (dragging) {
+    const cells = [...grid.querySelectorAll('td.sel')].map(cellRef);
+    clearSel();
+    if (cells.length) openBooking(cells);
+    setTimeout(() => { dragging = false; }, 0);
+  }
+});
+
+/* ---------- 借用 ---------- */
+let bookSel = [];
+let shownConflicts = '';   // 對話框上次顯示的衝突；送出時若多了新衝突（剛被別人借走）就先停下來讓使用者確認
+function openBooking(sel) {
+  bookSel = sel;
+  document.getElementById('book-title').value = '';
+  document.getElementById('book-note').value = '';
+  document.getElementById('book-time').value = '';
+  let unit = ''; try { unit = localStorage.getItem('venue_unit') || ''; } catch (e) {}
+  document.getElementById('book-unit').value = unit || DEPT_LABEL[me.role] || '';
+  document.querySelector('input[name=rep][value=once]').checked = true;
+  document.getElementById('book-until').value = semesterEnd();
+  renderBookSummary();
+  openOv('book-ov');
+  setTimeout(() => document.getElementById('book-title').focus(), 50);
+}
+function bookGroups(sel) {
+  const g = {};
+  sel.forEach(x => { const k = x.pid + '|' + x.date; (g[k] = g[k] || { pid: x.pid, date: x.date, slots: [] }).slots.push(x.slot); });
+  return Object.values(g).sort((a, b) => a.date.localeCompare(b.date) || (places[a.pid].order || 99) - (places[b.pid].order || 99));
+}
+function isWeekly() { return document.querySelector('input[name=rep]:checked').value === 'weekly'; }
+/* 展開成實際要寫入的格子；已被借走的列為衝突（略過） */
+function expandEntries(sel, weekly, until) {
+  const list = [], conflicts = [], seen = {};
+  sel.forEach(x => {
+    let d = x.date;
+    while (true) {
+      const key = d + '/' + x.pid + '/' + x.slot;
+      if (!seen[key]) {
+        seen[key] = 1;
+        if (getBk(d, x.pid, x.slot)) conflicts.push({ date: d, pid: x.pid, slot: x.slot });
+        else if (!isPast(d, x.slot)) list.push({ date: d, pid: x.pid, slot: x.slot });
+      }
+      if (!weekly) break;
+      d = addDays(d, 7);
+      if (d > until) break;
+    }
+  });
+  return { list: list, conflicts: conflicts };
+}
+function renderBookSummary() {
+  const groups = bookGroups(bookSel), single = groups.length === 1;
+  document.getElementById('book-sum').innerHTML = groups.map(g =>
+    '<div><b>' + esc(placeName(g.pid)) + '</b>　' + mdLabel(g.date) + '　' + slotRange(g.slots) + '</div>').join('');
+  const wrap = document.getElementById('book-slots-wrap');
+  wrap.style.display = single ? '' : 'none';
+  if (single) {
+    const g = groups[0];
+    document.getElementById('book-slots').innerHTML = SLOTS.map(s => {
+      const taken = getBk(g.date, g.pid, s.k), past = isPast(g.date, s.k), on = g.slots.includes(s.k);
+      return '<button class="chip' + (on ? ' on' : '') + '"' + (taken || past ? ' disabled style="opacity:.35;cursor:not-allowed"' : '') +
+        ' onclick="toggleBookSlot(\'' + s.k + '\')" title="' + s.s + '–' + s.e + (taken ? '（已被借用）' : '') + '">' + s.label + '</button>';
+    }).join('');
+  }
+  const weekly = isWeekly(), until = document.getElementById('book-until').value || semesterEnd();
+  const { list, conflicts } = expandEntries(bookSel, weekly, until);
+  shownConflicts = conflicts.map(x => x.date + x.pid + x.slot).sort().join();
+  const pids = [...new Set(bookSel.map(x => x.pid))];
+  let h = '';
+  pids.forEach(pid => {
+    const p = places[pid]; if (!p) return;
+    if (p.needApproval || p.notes) h += '<div class="warn"><b>' + esc(p.name) + '</b>' + (p.needApproval ? '：需經審核，送出後為「待審核」，核准後才生效。' : '') + (p.notes ? '\n' + esc(p.notes) : '') + '</div>';
+  });
+  h += '<div style="font-size:14px;margin:4px 0 6px">共借 <b>' + list.length + '</b> 格' + (weekly ? '（每週一次，' + (list.length ? mdLabel(list[0].date) : '') + ' 起到 ' + mdLabel(until) + '）' : '') + '</div>';
+  if (conflicts.length) {
+    h += '<div class="conf">⚠ 下列 ' + conflicts.length + ' 格已被借走，會自動略過：<br>' +
+      conflicts.slice(0, 8).map(x => mdLabel(x.date) + ' ' + SLOT[x.slot].label + '（' + esc((getBk(x.date, x.pid, x.slot) || {}).title || '') + '）').join('、') +
+      (conflicts.length > 8 ? '…等' : '') + '</div>';
+  }
+  document.getElementById('book-check').innerHTML = h;
+  document.getElementById('book-ok').disabled = !list.length;
+}
+function toggleBookSlot(k) {
+  const g = bookGroups(bookSel)[0];
+  const i = bookSel.findIndex(x => x.slot === k);
+  if (i >= 0) { if (bookSel.length > 1) bookSel.splice(i, 1); }
+  else bookSel.push({ date: g.date, pid: g.pid, slot: k });
+  renderBookSummary();
+}
+async function submitBooking() {
+  const title = document.getElementById('book-title').value.trim();
+  if (!title) { toast('請填寫活動名稱'); document.getElementById('book-title').focus(); return; }
+  const unit = document.getElementById('book-unit').value.trim();
+  const note = document.getElementById('book-note').value.trim();
+  const time = document.getElementById('book-time').value.trim();
+  try { localStorage.setItem('venue_unit', unit); } catch (e) {}
+  const until = document.getElementById('book-until').value || semesterEnd();
+  const { list, conflicts } = expandEntries(bookSel, isWeekly(), until);
+  if (conflicts.map(x => x.date + x.pid + x.slot).sort().join() !== shownConflicts) {
+    renderBookSummary();
+    toast(list.length ? '有時段剛被別人借走了，清單已更新，請再確認一次' : '你選的時段剛被別人借走了');
+    return;
+  }
+  if (!list.length) { toast('沒有可以借用的時段'); return; }
+  const series = list.length > 1 ? store.newId() : null;
+  const payload = {};
+  let waitN = 0;
+  list.forEach(x => {
+    const p = places[x.pid] || {};
+    const rec = { title: title, by: me.email, name: me.name, unit: unit, status: p.needApproval ? 'wait' : 'ok', at: store.ts() };
+    if (p.needApproval) waitN++;
+    if (series) rec.series = series;
+    if (note) rec.note = note;
+    if (time) rec.time = time;
+    payload['bk/' + x.date + '/' + x.pid + '/' + x.slot] = rec;
+  });
+  const btn = document.getElementById('book-ok'); btn.disabled = true;
+  try {
+    await store.create(payload);
+    closeOv('book-ov');
+    toast(waitN ? ('已送出 ' + list.length + ' 格申請，' + (waitN === list.length ? '等待審核' : waitN + ' 格需等待審核')) : ('借用成功！共 ' + list.length + ' 格'));
+  } catch (e) {
+    toast(String(e && (e.code || e.message) || '').toLowerCase().includes('permission') || (e && e.message === 'conflict')
+      ? '有時段剛被別人借走了，請看一下最新狀態再借一次' : '借用失敗：' + ((e && (e.code || e.message)) || '請稍後再試'));
+  } finally { btn.disabled = false; }
+}
+
+/* ---------- 詳細資料、取消、審核 ---------- */
+function seriesEntries(sid, fromDate) {
+  const out = [];
+  eachBooking((date, pid, slot, b) => { if (b.series === sid && (!fromDate || date >= fromDate)) out.push({ date: date, pid: pid, slot: slot, b: b }); });
+  return out.sort((a, b) => a.date.localeCompare(b.date) || SLOT[a.slot].i - SLOT[b.slot].i);
+}
+function openDetail(ref) {
+  const b = getBk(ref.date, ref.pid, ref.slot); if (!b) return;
+  const s = SLOT[ref.slot], owner = b.by === me.email, appr = isApproverOf(ref.pid);
+  const t = todayStr();
+  const rest = b.series ? seriesEntries(b.series, ref.date < t ? t : ref.date) : [];
+  document.getElementById('detail-title').textContent = b.title;
+  const kv = [
+    ['場地', placeName(ref.pid)],
+    ['時間', mdLabel(ref.date) + ' ' + s.label + '（' + (b.time || s.s + '–' + s.e) + '）'],
+    ['申請人', (b.name || '') + (b.unit ? '・' + b.unit : '') + (b.by && b.by.includes('@') ? '\n' + b.by : '')],
+    ['狀態', b.status === 'wait' ? '⏳ 待審核' : '✅ 已借用'],
+  ];
+  if (b.note) kv.push(['備註', b.note]);
+  if (b.series) kv.push(['重複', '同一批預約，今天以後還有 ' + rest.length + ' 格']);
+  if (b.src === 'eschool') kv.push(['來源', '由舊校務系統匯入']);
+  document.getElementById('detail-kv').innerHTML = kv.map(([k, v]) => '<dt>' + k + '</dt><dd>' + esc(v) + '</dd>').join('');
+  const one = [{ date: ref.date, pid: ref.pid, slot: ref.slot, b: b }];
+  const btns = [];
+  const past = isPast(ref.date, ref.slot);
+  if (appr && b.status === 'wait') {
+    const restWait = rest.filter(x => x.b.status === 'wait');
+    if (restWait.length > 1) {
+      btns.push(['核准整批（' + restWait.length + ' 格）', 'ok', () => approve(restWait)]);
+      btns.push(['只核准這一格', 'ok', () => approve(one)]);
+      btns.push(['退回整批', 'danger', () => reject(restWait)]);
+    } else {
+      btns.push(['核准', 'ok', () => approve(one)]);
+      btns.push(['退回', 'danger', () => reject(one)]);
+    }
+  }
+  if ((owner || appr) && !past) {
+    btns.push(['取消這一格', '', () => cancel(one)]);
+    if (rest.length > 1) btns.push(['取消這天之後整批（' + rest.length + ' 格）', '', () => cancel(rest)]);
+  }
+  btns.push(['關閉', '', () => closeOv('detail-ov')]);
+  const box = document.getElementById('detail-btns'); box.innerHTML = '';
+  btns.forEach(([label, cls, fn]) => { const bt = document.createElement('button'); bt.className = 'tb-btn' + (cls ? ' ' + cls : ''); bt.textContent = label; bt.onclick = fn; box.appendChild(bt); });
+  openOv('detail-ov');
+}
+function describe(entries) {
+  const e0 = entries[0], dates = [...new Set(entries.map(x => x.date))].sort();
+  const when = dates.length === 1 ? mdLabel(dates[0]) : mdLabel(dates[0]) + '～' + mdLabel(dates[dates.length - 1]) + ' 共 ' + entries.length + ' 格';
+  return placeName(e0.pid) + ' ' + when + ' ' + slotRange([...new Set(entries.map(x => x.slot))]) + '「' + e0.b.title + '」';
+}
+/* 通知申請人（別人取消或退回時） */
+function notifyOwners(entries, verb, reason) {
+  const byOwner = {};
+  entries.forEach(x => { if (x.b.by && x.b.by.includes('@') && x.b.by !== me.email) (byOwner[x.b.by] = byOwner[x.b.by] || []).push(x); });
+  return Promise.all(Object.keys(byOwner).map(owner => store.pushNotice(ekOf(owner), {
+    text: describe(byOwner[owner]) + ' ' + verb + (reason ? '，原因：' + reason : '') + '（' + me.name + '）', at: store.ts(),
+  }))).catch(() => {});
+}
+async function approve(entries) {
+  if (!entries.length) return;
+  const payload = {}; entries.forEach(x => { payload['bk/' + x.date + '/' + x.pid + '/' + x.slot + '/status'] = 'ok'; });
+  try { await store.update(payload); closeOv('detail-ov'); toast('已核准 ' + entries.length + ' 格'); }
+  catch (e) { toast('核准失敗：' + (e.code || e.message)); }
+}
+async function reject(entries) {
+  if (!entries.length) return;
+  const reason = await askText('退回 ' + entries.length + ' 格申請', '退回原因（會通知申請人，可留空）');
+  if (reason === null) return;
+  const payload = {}; entries.forEach(x => { payload['bk/' + x.date + '/' + x.pid + '/' + x.slot] = null; });
+  try { await store.update(payload); await notifyOwners(entries, '已被退回', reason); closeOv('detail-ov'); toast('已退回，並通知申請人'); }
+  catch (e) { toast('退回失敗：' + (e.code || e.message)); }
+}
+async function cancel(entries) {
+  if (!entries.length) return;
+  const others = entries.some(x => x.b.by !== me.email);
+  let reason = '';
+  if (others) { reason = await askText('取消別人的 ' + entries.length + ' 格預約', '取消原因（會通知申請人）'); if (reason === null) return; }
+  else if (!confirm('確定要取消 ' + describe(entries) + ' 嗎？')) return;
+  const payload = {}; entries.forEach(x => { payload['bk/' + x.date + '/' + x.pid + '/' + x.slot] = null; });
+  try { await store.update(payload); if (others) await notifyOwners(entries, '已被取消', reason); closeOv('detail-ov'); toast('已取消 ' + entries.length + ' 格'); }
+  catch (e) { toast('取消失敗：' + (e.code || e.message)); }
+}
+
+/* ---------- 我的預約、待審核（依批次分組） ---------- */
+function groupEntries(list) {
+  const g = {};
+  list.forEach(x => { const k = x.b.series || (x.date + '/' + x.pid + '/' + x.slot); (g[k] = g[k] || []).push(x); });
+  return Object.values(g).map(a => a.sort((x, y) => x.date.localeCompare(y.date) || SLOT[x.slot].i - SLOT[y.slot].i))
+    .sort((a, b) => a[0].date.localeCompare(b[0].date) || SLOT[a[0].slot].i - SLOT[b[0].slot].i);
+}
+function patternOf(entries) {
+  const pids = [...new Set(entries.map(x => x.pid))].map(placeName).join('、');
+  const dates = [...new Set(entries.map(x => x.date))];
+  const slots = slotRange([...new Set(entries.map(x => x.slot))]);
+  if (dates.length === 1) return pids + '　' + mdLabel(dates[0]) + '　' + slots;
+  const wds = [...new Set(dates.map(d => parseYmd(d).getDay()))].sort().map(d => '週' + WD[d]).join('、');
+  return pids + '　每' + wds + ' ' + slots + '　' + mdLabel(dates[0]) + '～' + mdLabel(dates[dates.length - 1]);
+}
+function groupCard(entries, actions) {
+  const b = entries[0].b, waitN = entries.filter(x => x.b.status === 'wait').length;
+  const id = 'g' + Math.random().toString(36).slice(2, 8);
+  window[id] = entries;
+  let h = '<div class="card"><div class="row"><div class="grow"><h3>' + esc(b.title) +
+    (waitN ? '<span class="pill wait">待審核 ' + (waitN === entries.length ? '' : waitN + ' 格') + '</span>' : '<span class="pill ok">已借用</span>') + '</h3>' +
+    '<div class="meta">' + esc(patternOf(entries)) + (entries.length > 1 ? '　共 ' + entries.length + ' 格' : '') + '<br>' +
+    esc((b.name || '') + (b.unit ? '・' + b.unit : '')) + (b.note ? '　備註：' + esc(b.note) : '') + '</div>';
+  if (entries.length > 1) {
+    h += '<details class="more"><summary>看每一格</summary><ul>' + entries.map((x, i) =>
+      '<li><span>' + mdLabel(x.date) + ' ' + SLOT[x.slot].label + '　' + esc(placeName(x.pid)) + (x.b.status === 'wait' ? '（待審）' : '') + '</span>' +
+      '<button class="tb-btn" onclick="cancel([window.' + id + '[' + i + ']])">取消</button></li>').join('') + '</ul></details>';
+  }
+  h += '</div><div class="acts">' + actions(id, entries) + '</div></div></div>';
+  return h;
+}
+function renderMine() {
+  const ns = Object.keys(notices || {}).map(k => Object.assign({ id: k }, notices[k])).sort((a, b) => (b.at || 0) - (a.at || 0));
+  document.getElementById('mine-notices').innerHTML = ns.map(n =>
+    '<div class="notice"><span>📣</span><span>' + esc(n.text) + '</span><button class="x" title="知道了" onclick="dismissNotice(\'' + n.id + '\')">×</button></div>').join('');
+  const t = todayStr(), list = [];
+  eachBooking((date, pid, slot, b) => { if (b.by === me.email && !isPast(date, slot) && date >= t) list.push({ date: date, pid: pid, slot: slot, b: b }); });
+  const groups = groupEntries(list);
+  document.getElementById('mine-list').innerHTML = '<h2 class="sec">我的預約（今天以後）</h2>' + (groups.length
+    ? groups.map(g => groupCard(g, id => '<button class="tb-btn" onclick="cancel(window.' + id + ')">' + (g.length > 1 ? '全部取消' : '取消') + '</button>')).join('')
+    : '<div class="empty">目前沒有預約。到「每日總覽」點空格就能借用。</div>');
+}
+function dismissNotice(id) { store.update({ ['notice/' + me.ek + '/' + id]: null }); }
+function renderApprove() {
+  const groups = groupEntries(waitingForMe());
+  document.getElementById('approve-list').innerHTML = '<h2 class="sec">待審核的申請</h2>' + (groups.length
+    ? groups.map(g => groupCard(g, id => '<button class="tb-btn ok" onclick="approve(window.' + id + ')">核准' + (g.length > 1 ? '全部' : '') + '</button>' +
+      '<button class="tb-btn danger" onclick="reject(window.' + id + ')">退回</button>')).join('')
+    : '<div class="empty">🎉 沒有待審核的申請</div>');
+}
+
+/* ---------- 場地管理（管理者） ---------- */
+function renderAdmin() {
+  document.getElementById('cfg-semend').value = semesterEnd();
+  const pids = sortedPlaces(true);
+  let h = '<tr><th>順序</th><th>場地名稱</th><th>位置</th><th>開放借用</th><th>需審核</th><th>審核人 email</th><th>借用注意事項</th><th></th></tr>';
+  pids.forEach(pid => {
+    const p = places[pid], appr = Object.keys(p.approvers || {}).map(k => k.replace(/,/g, '.')).join(', ');
+    h += '<tr data-pid="' + pid + '"><td><input type="number" class="a-order" value="' + (p.order || '') + '"></td>' +
+      '<td><input type="text" class="a-name" value="' + esc(p.name) + '" maxlength="30"></td>' +
+      '<td><input type="text" class="a-site" value="' + esc(p.site || '') + '" maxlength="30"></td>' +
+      '<td class="c"><input type="checkbox" class="a-active"' + (p.active ? ' checked' : '') + '></td>' +
+      '<td class="c"><input type="checkbox" class="a-need"' + (p.needApproval ? ' checked' : '') + '></td>' +
+      '<td><input type="text" class="a-appr" value="' + esc(appr) + '" placeholder="' + (p.needApproval ? '未指定＝管理者審核' : '') + '"></td>' +
+      '<td><textarea class="a-notes" rows="2">' + esc(p.notes || '') + '</textarea></td>' +
+      '<td><button class="tb-btn primary" onclick="savePlace(\'' + pid + '\')">儲存</button></td></tr>';
+  });
+  document.getElementById('admin-table').innerHTML = h;
+}
+function savePlace(pid) {
+  const tr = document.querySelector('#admin-table tr[data-pid="' + pid + '"]');
+  const v = c => tr.querySelector(c);
+  const name = v('.a-name').value.trim();
+  if (!name) { toast('場地名稱不能空白'); return; }
+  const approvers = {};
+  const bad = [];
+  v('.a-appr').value.split(/[\s,，;；]+/).filter(Boolean).forEach(e => {
+    e = e.toLowerCase();
+    if (!/^[^@\s]+@lsps\.tp\.edu\.tw$/.test(e)) bad.push(e); else approvers[ekOf(e)] = true;
+  });
+  if (bad.length) { toast('這些不是學校帳號：' + bad.join(', ')); return; }
+  const obj = { name: name, site: v('.a-site').value.trim(), order: +v('.a-order').value || 99, active: v('.a-active').checked,
+    needApproval: v('.a-need').checked, notes: v('.a-notes').value.trim() };
+  if (Object.keys(approvers).length) obj.approvers = approvers;
+  store.update({ ['places/' + pid]: obj }).then(() => toast('已儲存「' + name + '」')).catch(e => toast('儲存失敗：' + (e.code || e.message)));
+}
+function addPlace() {
+  const pid = 'p' + Date.now().toString(36);
+  store.update({ ['places/' + pid]: { name: '新場地', site: '', order: 99, active: false, needApproval: true, notes: '' } })
+    .then(() => toast('已新增一列，請修改名稱並勾「開放借用」後儲存'));
+}
+function saveConfig() {
+  const v = document.getElementById('cfg-semend').value;
+  if (!v) return;
+  store.update({ 'config/semesterEnd': v }).then(() => toast('學期結束日已設為 ' + v));
+}
+
+/* 每分鐘刷新一次（過去的節次變灰） */
+setInterval(() => { if (view === 'day' || view === 'week') render(); }, 60000);
+
+/* ---------- 啟動 ---------- */
+if (DEMO) {
+  demoInit();
+} else {
+  const scripts = ['firebase-app-compat.js', 'firebase-auth-compat.js', 'firebase-database-compat.js'].map(f => 'https://www.gstatic.com/firebasejs/10.12.0/' + f);
+  (function loadSeq(i) {
+    if (i >= scripts.length) { initCloud(); return; }
+    const s = document.createElement('script');
+    s.src = scripts[i]; s.onload = () => loadSeq(i + 1);
+    s.onerror = () => { document.getElementById('login-msg').textContent = '元件載入失敗，請檢查網路後重新整理。'; };
+    document.head.appendChild(s);
+  })(0);
+}
+</script>
+</body>
+</html>
