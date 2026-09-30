@@ -59,11 +59,11 @@ with sync_playwright() as p:
     check("unit remembered", page.evaluate("localStorage.getItem('venue_unit')") == "教務處教學組")
 
     # 3 對話框裡點節次加借
-    cell(page, D, "e152", "p1").click(); page.wait_for_timeout(100)
+    cell(page, D, "e159", "p1").click(); page.wait_for_timeout(100)
     page.locator("#book-slots .chip", has_text="第2節").click(); page.wait_for_timeout(50)
     check("chip adds slot", page.locator("#book-slots .chip.on").count() == 2)
     page.fill("#book-title", "電腦研習"); page.click("#book-ok"); page.wait_for_timeout(150)
-    check("chip booking saved", bk(page, D, "e152", "p1") is not None and bk(page, D, "e152", "p2") is not None)
+    check("chip booking saved", bk(page, D, "e159", "p1") is not None and bk(page, D, "e159", "p2") is not None)
 
     # 4 每週重複＋衝突略過（209 下週二第1節；先塞一筆兩週後的衝突）
     W = page.evaluate("addDays(mondayOf(todayStr()), 8)")          # 下週二
@@ -125,7 +125,7 @@ with sync_playwright() as p:
     card = page.locator("#approve-list .card", has_text="電腦研習").first
     card.locator("button", has_text="退回").click(); page.wait_for_timeout(100)
     page.fill("#ask-text", "當天有電腦維修"); page.click("#ask-ok"); page.wait_for_timeout(200)
-    check("reject removes", bk(page, D, "e152", "p1") is None and bk(page, D, "e152", "p2") is None)
+    check("reject removes", bk(page, D, "e159", "p1") is None and bk(page, D, "e159", "p2") is None)
     check("badge decreased", int(page.text_content("#b-approve") or 0) < int(badge or 0), (badge, page.text_content("#b-approve")))
 
     # 10 審核人取消別人的（免審核場地也可以，因為管理者/審核人）→ 老師只有自己的審核場地可管；這裡用管理者取消

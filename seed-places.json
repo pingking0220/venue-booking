@@ -1,20 +1,146 @@
 {
-  "e155": { "name": "視聽教室", "site": "忠信樓1F", "order": 1, "active": true, "needApproval": false, "notes": "用完請將設備完全關閉" },
-  "e150": { "name": "209電腦教室", "site": "209", "order": 2, "active": true, "needApproval": false, "notes": "1.請注意該節課是否有資訊課的問題。\n2.不須審核。若有重復，看申請者是誰協調處理。" },
-  "e152": { "name": "211電腦教室", "site": "211", "order": 3, "active": true, "needApproval": true, "notes": "" },
-  "e156": { "name": "2樓會議室", "site": "力行樓", "order": 4, "active": true, "needApproval": true, "notes": "室內各項電源設備，請於使用完畢後，記得關畢，以維護使用安全" },
-  "e159": { "name": "穿堂", "site": "力行樓一樓", "order": 5, "active": true, "needApproval": true, "notes": "" },
-  "e175": { "name": "419多功能教室", "site": "勤學樓四樓", "order": 6, "active": true, "needApproval": true, "notes": "1.場地使用以教務處課後班相關使用為主。\n2.使用場地需有教師在現場管理，鑰匙請向總務處或教務處借用。\n3.午休時間請勿大聲喧嘩。\n4.使用結束後東西請歸位並關好門。" },
-  "e176": { "name": "420訊育教室", "site": "勤學樓四樓", "order": 7, "active": true, "needApproval": true, "notes": "1.場地使用以學務處劇團及社團相關使用為主。\n2.使用場地需有教師在現場管理，鑰匙請向總務處或學務處借用。\n3.午休時間請勿大聲喧嘩。\n4.使用結束後東西請歸位並關好門。" },
-  "e177": { "name": "421學籍檔案", "site": "勤學樓四樓", "order": 8, "active": true, "needApproval": true, "notes": "1.場地使用以輔導室團體輔導或個別晤談相關使用為主。\n2.使用場地需有教師在現場管理，鑰匙請向總務處或輔導室借用。\n3.午休時間請勿大聲喧嘩。\n4.使用結束後東西請歸位並關好門。" },
-  "e178": { "name": "321特色教室", "site": "勤學樓3樓", "order": 9, "active": true, "needApproval": true, "notes": "" },
-  "e179": { "name": "322特色教室", "site": "勤學樓3樓", "order": 10, "active": true, "needApproval": true, "notes": "" },
-  "e180": { "name": "409社會教室", "site": "力行樓4樓", "order": 11, "active": true, "needApproval": true, "notes": "" },
-  "e170": { "name": "214美勞教室", "site": "214", "order": 12, "active": true, "needApproval": true, "notes": "" },
-  "e154": { "name": "交通安全中心", "site": "力行樓地下室", "order": 13, "active": true, "needApproval": true, "notes": "1.使用場地需有教師在現場管理。\n2.午休時間請勿大聲喧嘩。\n3.使用結束後東西請歸位並關好門。" },
-  "e153": { "name": "快樂兒童中心", "site": "勤學樓地下室", "order": 14, "active": true, "needApproval": true, "notes": "1.使用場地需有教師在現場管理。\n2.午休時間請勿大聲喧嘩。\n3.器材使用結束後請務必歸還" },
-  "e168": { "name": "桌球教室", "site": "力行樓地下室", "order": 15, "active": true, "needApproval": true, "notes": "借用後，請保持教室清潔。" },
-  "e158": { "name": "樂活教室", "site": "懷恩地下室", "order": 16, "active": true, "needApproval": true, "notes": "" },
-  "e157": { "name": "教師會辦公室", "site": "力行樓一樓", "order": 17, "active": true, "needApproval": true, "notes": "" },
-  "e182": { "name": "輔導室諮商室", "site": "輔導室", "order": 18, "active": true, "needApproval": true, "notes": "愛惜使用" }
+  "e155": {
+    "name": "視聽教室",
+    "site": "忠信樓1F",
+    "order": 1,
+    "active": true,
+    "needApproval": false,
+    "notes": "用完請將設備完全關閉"
+  },
+  "e150": {
+    "name": "209電腦教室",
+    "site": "209",
+    "order": 2,
+    "active": true,
+    "needApproval": false,
+    "notes": "1.請注意該節課是否有資訊課的問題。\n2.不須審核。若有重復，看申請者是誰協調處理。"
+  },
+  "e152": {
+    "name": "211電腦教室",
+    "site": "211",
+    "order": 3,
+    "active": true,
+    "needApproval": false,
+    "notes": ""
+  },
+  "e156": {
+    "name": "2樓會議室",
+    "site": "力行樓",
+    "order": 4,
+    "active": true,
+    "needApproval": false,
+    "notes": "室內各項電源設備，請於使用完畢後，記得關畢，以維護使用安全"
+  },
+  "e159": {
+    "name": "穿堂",
+    "site": "力行樓一樓",
+    "order": 5,
+    "active": true,
+    "needApproval": false,
+    "notes": ""
+  },
+  "e175": {
+    "name": "419多功能教室",
+    "site": "勤學樓四樓",
+    "order": 6,
+    "active": true,
+    "needApproval": false,
+    "notes": "1.場地使用以教務處課後班相關使用為主。\n2.使用場地需有教師在現場管理，鑰匙請向總務處或教務處借用。\n3.午休時間請勿大聲喧嘩。\n4.使用結束後東西請歸位並關好門。"
+  },
+  "e176": {
+    "name": "420訊育教室",
+    "site": "勤學樓四樓",
+    "order": 7,
+    "active": true,
+    "needApproval": false,
+    "notes": "1.場地使用以學務處劇團及社團相關使用為主。\n2.使用場地需有教師在現場管理，鑰匙請向總務處或學務處借用。\n3.午休時間請勿大聲喧嘩。\n4.使用結束後東西請歸位並關好門。"
+  },
+  "e177": {
+    "name": "421學籍檔案",
+    "site": "勤學樓四樓",
+    "order": 8,
+    "active": true,
+    "needApproval": false,
+    "notes": "1.場地使用以輔導室團體輔導或個別晤談相關使用為主。\n2.使用場地需有教師在現場管理，鑰匙請向總務處或輔導室借用。\n3.午休時間請勿大聲喧嘩。\n4.使用結束後東西請歸位並關好門。"
+  },
+  "e178": {
+    "name": "321特色教室",
+    "site": "勤學樓3樓",
+    "order": 9,
+    "active": true,
+    "needApproval": false,
+    "notes": ""
+  },
+  "e179": {
+    "name": "322特色教室",
+    "site": "勤學樓3樓",
+    "order": 10,
+    "active": true,
+    "needApproval": false,
+    "notes": ""
+  },
+  "e180": {
+    "name": "409社會教室",
+    "site": "力行樓4樓",
+    "order": 11,
+    "active": true,
+    "needApproval": false,
+    "notes": ""
+  },
+  "e170": {
+    "name": "214美勞教室",
+    "site": "214",
+    "order": 12,
+    "active": true,
+    "needApproval": false,
+    "notes": ""
+  },
+  "e154": {
+    "name": "交通安全中心",
+    "site": "力行樓地下室",
+    "order": 13,
+    "active": true,
+    "needApproval": false,
+    "notes": "1.使用場地需有教師在現場管理。\n2.午休時間請勿大聲喧嘩。\n3.使用結束後東西請歸位並關好門。"
+  },
+  "e153": {
+    "name": "快樂兒童中心",
+    "site": "勤學樓地下室",
+    "order": 14,
+    "active": true,
+    "needApproval": false,
+    "notes": "1.使用場地需有教師在現場管理。\n2.午休時間請勿大聲喧嘩。\n3.器材使用結束後請務必歸還"
+  },
+  "e168": {
+    "name": "桌球教室",
+    "site": "力行樓地下室",
+    "order": 15,
+    "active": true,
+    "needApproval": false,
+    "notes": "借用後，請保持教室清潔。"
+  },
+  "e158": {
+    "name": "樂活教室",
+    "site": "懷恩地下室",
+    "order": 16,
+    "active": true,
+    "needApproval": false,
+    "notes": ""
+  },
+  "e157": {
+    "name": "教師會辦公室",
+    "site": "力行樓一樓",
+    "order": 17,
+    "active": true,
+    "needApproval": false,
+    "notes": ""
+  },
+  "e182": {
+    "name": "輔導室諮商室",
+    "site": "輔導室",
+    "order": 18,
+    "active": true,
+    "needApproval": false,
+    "notes": "愛惜使用"
+  }
 }

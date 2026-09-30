@@ -4,3 +4,4 @@ tools/import-preview.json
 tools/import-write.json
 tools/rules-test/database.rules.json
 tools/rules-test/*.log
+.claude/
