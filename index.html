@@ -26,6 +26,8 @@ nav button.on{background:var(--ink);color:#fff}
 #user-pill{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:3px 4px 3px 12px}
 #user-pill b{color:var(--ink);font-weight:500}
 #user-pill button{font-size:12px;padding:4px 11px;border-radius:99px;border:1px solid var(--line);background:var(--panel);cursor:pointer}
+.home{flex-shrink:0;text-decoration:none;font-size:14px;color:var(--muted);padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel);white-space:nowrap}
+.home:hover{background:var(--bg);color:var(--ink)}
 a.help{font-size:14px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:8px}
 a.help:hover{background:var(--bg);color:var(--ink)}
 
@@ -169,6 +171,7 @@ body.demo #login-gate{display:none !important}
 </div>
 
 <header>
+  <a class="home" href="https://pingking0220.github.io/" title="回力行國小行政服務首頁">🏠 首頁</a>
   <h1>🏫 力行國小場地預約</h1>
   <nav>
     <button data-v="day" onclick="setView('day')">每日總覽</button>
@@ -279,7 +282,7 @@ body.demo #login-gate{display:none !important}
     <p>請使用學校 Google 帳號登入<br><b>@lsps.tp.edu.tw</b></p>
     <button id="btn-login" onclick="signIn()">使用 Google 帳號登入</button>
     <div id="login-msg"></div>
-    <div style="margin-top:14px;font-size:13px"><a href="guide.html" target="_blank" rel="noopener" style="color:var(--muted)">第一次使用？看操作說明</a></div>
+    <div style="margin-top:14px;font-size:13px"><a href="guide.html" target="_blank" rel="noopener" style="color:var(--muted)">第一次使用？看操作說明</a>　｜　<a href="https://pingking0220.github.io/" style="color:var(--muted)">回行政服務首頁</a></div>
   </div>
 </div>
 
