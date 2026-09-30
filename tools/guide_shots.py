@@ -87,7 +87,7 @@ with sync_playwright() as p:
     shot(page, "02-day", [
         (["#view-day .toolbar > button:first-child", "#day-chips"], 1, "tl"),
         ("#view-day .legend", 2, "tl"),
-        ("#day-grid tbody tr:nth-child(3) th", 3, "l"),
+        ("#day-grid tbody tr:nth-child(4) th", 3, "l"),
         ("#day-grid thead th.now", 4, "tr"),
         (cell(D, "e155", "p3"), 5, "bl"),
     ], clip=["header", "#day-grid tbody tr:nth-child(9)"], pad=0)
